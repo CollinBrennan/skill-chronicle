@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,7 +20,7 @@ const formSchema = z.object({
   name: z.string().min(1).max(255).trim().toLowerCase(),
   hours: z.coerce.number().int().nonnegative().optional(),
   minutes: z.coerce.number().int().nonnegative().optional(),
-  notes: z.string().max(255).trim().toLowerCase().optional(),
+  notes: z.string().max(255).trim().optional(),
 })
 
 export default function LogForm() {
