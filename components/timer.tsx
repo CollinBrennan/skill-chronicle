@@ -15,7 +15,7 @@ export default function Timer() {
     }
   }
 
-  function stop() {
+  function pause() {
     if (isRunning) {
       clearInterval(timer.current)
       setElapsedTime(Date.now() - startTime.current)
@@ -37,10 +37,28 @@ export default function Timer() {
 
   return (
     <div>
-      <div>Elapsed time: {elapsedTime}</div>
-      <button onClick={start}>Start</button>
-      <button onClick={stop}>Stop</button>
+      <div>Elapsed time: {millisToFormattedTime(elapsedTime)}</div>
+      {!isRunning ? (
+        <button onClick={start}>Start</button>
+      ) : (
+        <button onClick={pause}>Pause</button>
+      )}
+
       <button onClick={reset}>Reset</button>
     </div>
   )
+}
+
+function millisToFormattedTime(millis: number): string {
+  const hours = Math.floor(millis / 3600000)
+    .toString()
+    .padStart(2, '0')
+  const minutes = Math.floor((millis % 3600000) / 60000)
+    .toString()
+    .padStart(2, '0')
+  const seconds = Math.floor((millis % 60000) / 1000)
+    .toString()
+    .padStart(2, '0')
+
+  return `${hours}:${minutes}:${seconds}`
 }
