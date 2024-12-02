@@ -18,6 +18,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { Session } from 'next-auth'
+import SignoutButton from './signout-button'
 
 const items = [
   {
@@ -32,7 +34,11 @@ const items = [
   },
 ]
 
-export function AppSidebar() {
+type Props = {
+  session: Session
+}
+
+export function AppSidebar({ session }: Props) {
   return (
     <Sidebar>
       <SidebarContent>
@@ -60,7 +66,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> {session.user?.name}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -72,7 +78,7 @@ export function AppSidebar() {
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <span>Sign out</span>
+                  <SignoutButton />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
