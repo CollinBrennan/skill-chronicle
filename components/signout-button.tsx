@@ -1,4 +1,5 @@
 import { signOut } from '@/auth'
+import { redirect } from 'next/navigation'
 
 export default function SignoutButton() {
   return (
