@@ -9,6 +9,9 @@ import {
 import type { AdapterAccountType } from 'next-auth/adapters'
 
 export const skillLog = pgTable('skill_log', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   userId: text('user_id')
     .notNull()
     .references(() => users.id),

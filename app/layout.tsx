@@ -24,7 +24,7 @@ export default async function RootLayout({
         {session ? (
           <SidebarProvider>
             <AppSidebar session={session} />
-            <main>
+            <main className="w-full">
               <SidebarTrigger />
               {children}
             </main>

@@ -16,6 +16,7 @@ import {
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { insertLog } from '@/actions/skillLogActions'
+import { revalidatePath } from 'next/cache'
 
 const formSchema = z.object({
   name: z.string().min(1).max(255).trim().toLowerCase(),

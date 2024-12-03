@@ -4,7 +4,12 @@ import Timer from '@/components/timer'
 export default async function Dashboard() {
   return (
     <div>
-      <LogDialog />
+      <div className="px-2 ">
+        <h1 className="text-4xl">Dashboard</h1>
+        <div className="py-4">
+          <LogDialog />
+        </div>
+      </div>
     </div>
   )
 }
