@@ -2,17 +2,9 @@
 
 import { db } from '@/db/drizzle'
 import { log } from '@/db/schema'
+import { LogData, LogFormData } from '@/types/types'
 import { desc, eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
-
-type LogValues = {
-  userId: string
-  name: string
-  hours: number
-  minutes: number
-  note: string
-  date: Date
-}
 
 export async function insertLog({
   userId,
@@ -21,7 +13,7 @@ export async function insertLog({
   minutes,
   note,
   date,
-}: LogValues) {
+}: LogFormData) {
   const totalMinutes = hours * 60 + minutes
   await db
     .insert(log)
@@ -35,11 +27,21 @@ export async function deleteLog(logId: string) {
   revalidatePath('/logs')
 }
 
-export async function getLogs(userId: string) {
+export async function getLogs(userId: string): Promise<LogData[]> {
   const logs = await db
     .select()
     .from(log)
     .where(eq(log.userId, userId))
     .orderBy(desc(log.createdAt))
+  return logs
+}
+
+export async function getRecentLogs(userId: string): Promise<LogData[]> {
+  const logs = await db
+    .select()
+    .from(log)
+    .where(eq(log.userId, userId))
+    .orderBy(desc(log.createdAt))
+    .limit(5)
   return logs
 }
