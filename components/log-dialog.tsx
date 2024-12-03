@@ -24,13 +24,18 @@ import {
 import { Textarea } from './ui/textarea'
 import { Input } from './ui/input'
 import { useForm } from 'react-hook-form'
-import { Loader2 } from 'lucide-react'
+import { CalendarIcon, Loader2 } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { cn } from '@/lib/utils'
+import { Calendar } from './ui/calendar'
+import { format } from 'date-fns'
 
 const formSchema = z.object({
   name: z.string().min(1).max(255).trim().toLowerCase(),
   hours: z.coerce.number().int().nonnegative().default(0),
   minutes: z.coerce.number().int().nonnegative().default(0),
   note: z.string().max(255).trim().default(''),
+  date: z.date(),
 })
 
 type Props = {
@@ -47,6 +52,7 @@ export default function LogDialog({ userId }: Props) {
       hours: 0,
       minutes: 30,
       note: '',
+      date: new Date(),
     },
   })
 
@@ -71,13 +77,50 @@ export default function LogDialog({ userId }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Log Skill</DialogTitle>
-          <DialogDescription>{currentFormattedDate()}</DialogDescription>
+          <DialogDescription>
+            Enter the name of the skill you learned and how long you spent
+            learning it.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          className="w-[240px] pl-3 text-left font-normal"
+                        >
+                          {format(field.value, 'PPP')}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date('1900-01-01')
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -147,17 +190,4 @@ export default function LogDialog({ userId }: Props) {
       </DialogContent>
     </Dialog>
   )
-}
-
-function currentFormattedDate(): string {
-  const currentDate = new Date()
-
-  const formattedDate = currentDate.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-  })
-
-  return formattedDate
 }

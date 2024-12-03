@@ -12,6 +12,7 @@ import {
 import { redirect } from 'next/navigation'
 import { Button } from './ui/button'
 import DeleteLogButton from './delete-log-button'
+import { format } from 'date-fns'
 
 export default async function LogTable() {
   const session = await auth()
@@ -34,7 +35,7 @@ export default async function LogTable() {
       <TableBody>
         {logs.map((log) => (
           <TableRow key={log.id}>
-            <TableCell>{toFormattedDate(log.createdAt)}</TableCell>
+            <TableCell>{format(log.date, 'PP')}</TableCell>
             <TableCell>{log.name}</TableCell>
             <TableCell>{toFormattedDuration(log.minutes)}</TableCell>
             <TableCell>
@@ -52,16 +53,6 @@ export default async function LogTable() {
       </TableBody>
     </Table>
   )
-}
-
-function toFormattedDate(date: Date): string {
-  const formattedDate = date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  })
-
-  return formattedDate
 }
 
 function toFormattedDuration(minutes: number): string {
