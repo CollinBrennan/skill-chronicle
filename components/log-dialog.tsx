@@ -2,29 +2,29 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from './ui/button'
-import { Label } from './ui/label'
-import { Input } from './ui/input'
-import { Textarea } from './ui/textarea'
 import LogForm from './log-form'
+import { Button } from './ui/button'
+import { auth } from '@/auth'
 
-export default function LogDialog() {
+export default async function LogDialog() {
+  const session = await auth()
+  const userId = session?.user?.id
+
   return (
     <Dialog>
-      <DialogTrigger>
-        <span>New log</span>
+      <DialogTrigger asChild>
+        <Button>New log</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Log Skill</DialogTitle>
           <DialogDescription>{currentFormattedDate()}</DialogDescription>
         </DialogHeader>
-        <LogForm />
+        <LogForm userId={userId} />
       </DialogContent>
     </Dialog>
   )

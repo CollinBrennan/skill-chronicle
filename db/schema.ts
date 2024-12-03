@@ -8,6 +8,16 @@ import {
 } from 'drizzle-orm/pg-core'
 import type { AdapterAccountType } from 'next-auth/adapters'
 
+export const skillLog = pgTable('skill_log', {
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id),
+  name: text('name').notNull(),
+  minutes: integer('minutes').notNull(),
+  note: text('note').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+})
+
 export const users = pgTable('user', {
   id: text('id')
     .primaryKey()

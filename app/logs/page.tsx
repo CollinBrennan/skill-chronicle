@@ -1,3 +1,9 @@
+import LogDialog from '@/components/log-dialog'
+
 export default function Logs() {
-  return <></>
+  return (
+    <div>
+      <LogDialog />
+    </div>
+  )
 }

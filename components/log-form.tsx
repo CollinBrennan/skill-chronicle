@@ -15,27 +15,32 @@ import {
 } from '@/components/ui/form'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
+import { insertLog } from '@/actions/skillLogActions'
 
 const formSchema = z.object({
   name: z.string().min(1).max(255).trim().toLowerCase(),
-  hours: z.coerce.number().int().nonnegative().optional(),
-  minutes: z.coerce.number().int().nonnegative().optional(),
-  notes: z.string().max(255).trim().optional(),
+  hours: z.coerce.number().int().nonnegative().default(0),
+  minutes: z.coerce.number().int().nonnegative().default(0),
+  note: z.string().max(255).trim().default(''),
 })
 
-export default function LogForm() {
+type Props = {
+  userId: string | undefined
+}
+
+export default function LogForm({ userId }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       hours: 0,
       minutes: 30,
-      notes: '',
+      note: '',
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    if (userId) insertLog({ ...values, userId })
   }
 
   return (
@@ -87,10 +92,10 @@ export default function LogForm() {
         </div>
         <FormField
           control={form.control}
-          name="notes"
+          name="note"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>Note</FormLabel>
               <FormControl>
                 <Textarea placeholder="Practiced kickflips" {...field} />
               </FormControl>
