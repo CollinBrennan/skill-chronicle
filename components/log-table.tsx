@@ -33,7 +33,7 @@ export default async function LogTable() {
       </TableHeader>
       <TableBody>
         {logs.map((log) => (
-          <TableRow>
+          <TableRow key={log.id}>
             <TableCell>{toFormattedDate(log.createdAt)}</TableCell>
             <TableCell>{log.name}</TableCell>
             <TableCell>{toFormattedDuration(log.minutes)}</TableCell>
