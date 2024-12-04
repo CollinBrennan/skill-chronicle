@@ -23,18 +23,17 @@ type Props = {
 
 export async function RecentLogsCard({ logs }: Props) {
   return (
-    <Card>
+    <Card className="flex flex-col flex-1">
       <CardHeader>
         <CardTitle>Recent Logs</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Date</TableHead>
               <TableHead>Skill</TableHead>
               <TableHead>Duration</TableHead>
-              <TableHead>Note</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -43,13 +42,6 @@ export async function RecentLogsCard({ logs }: Props) {
                 <TableCell>{format(log.date, 'PP')}</TableCell>
                 <TableCell>{log.name}</TableCell>
                 <TableCell>{toFormattedDuration(log.minutes)}</TableCell>
-                <TableCell>
-                  {log.note.length > 0 ? (
-                    log.note
-                  ) : (
-                    <span className="italic">empty</span>
-                  )}
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>

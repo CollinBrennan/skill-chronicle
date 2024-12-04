@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from './ui/button'
 import { z } from 'zod'
-import { insertLog } from '@/actions/skillLogActions'
+import { insertLog } from '@/actions/logActions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import {

@@ -1,4 +1,4 @@
-import { deleteLog, getLogs } from '@/actions/skillLogActions'
+import { deleteLog, getLogs } from '@/actions/logActions'
 import { auth } from '@/auth'
 import {
   Table,

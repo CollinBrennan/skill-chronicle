@@ -1,4 +1,4 @@
-import { deleteLog } from '@/actions/skillLogActions'
+import { deleteLog } from '@/actions/logActions'
 import { Button } from './ui/button'
 import { Trash2 } from 'lucide-react'
 

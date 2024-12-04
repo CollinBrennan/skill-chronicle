@@ -42,6 +42,6 @@ export async function getRecentLogs(userId: string): Promise<LogData[]> {
     .from(log)
     .where(eq(log.userId, userId))
     .orderBy(desc(log.createdAt))
-    .limit(5)
+    .limit(3)
   return logs
 }
