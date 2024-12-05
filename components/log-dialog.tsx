@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from './ui/button'
 import { z } from 'zod'
-import { insertLog } from '@/actions/logActions'
+import { insertLog } from '@/actions/log-actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import {
@@ -24,14 +24,23 @@ import {
 import { Textarea } from './ui/textarea'
 import { Input } from './ui/input'
 import { useForm } from 'react-hook-form'
-import { CalendarIcon, Loader2 } from 'lucide-react'
+import { CalendarIcon, Check, ChevronsUpDown, Loader2 } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { cn } from '@/lib/utils'
 import { Calendar } from './ui/calendar'
 import { format } from 'date-fns'
+import { Skill } from '@/types/types'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from './ui/command'
 
 const formSchema = z.object({
-  name: z.string().min(1).max(255).trim().toLowerCase(),
+  skillId: z.string().min(1, 'Please select a skill'),
   hours: z.coerce.number().int().nonnegative().default(0),
   minutes: z.coerce.number().int().nonnegative().default(0),
   note: z.string().max(255).trim().default(''),
@@ -40,15 +49,16 @@ const formSchema = z.object({
 
 type Props = {
   userId: string
+  skills: Skill[]
 }
 
-export default function LogDialog({ userId }: Props) {
+export default function LogDialog({ userId, skills }: Props) {
   const [isOpen, setIsOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
+      skillId: '',
       hours: 0,
       minutes: 30,
       note: '',
@@ -123,13 +133,62 @@ export default function LogDialog({ userId }: Props) {
             />
             <FormField
               control={form.control}
-              name="name"
+              name="skillId"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Skill name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Skateboarding" {...field} />
-                  </FormControl>
+                <FormItem className="flex flex-col">
+                  <FormLabel>Skill</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            'w-[240px] justify-between',
+                            !field.value && 'text-muted-foreground'
+                          )}
+                        >
+                          <span className="overflow-hidden overflow-ellipsis">
+                            {field.value
+                              ? skills.find((skill) => skill.id === field.value)
+                                  ?.name
+                              : 'Select skill'}
+                          </span>
+
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[240px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Search skills..." />
+                        <CommandList>
+                          <CommandEmpty>No skills found.</CommandEmpty>
+                          <CommandGroup>
+                            {skills.map((skill) => (
+                              <CommandItem
+                                value={skill.name}
+                                key={skill.id}
+                                onSelect={() => {
+                                  form.setValue('skillId', skill.id)
+                                }}
+                              >
+                                {skill.name}
+                                <Check
+                                  className={cn(
+                                    'ml-auto',
+                                    skill.id === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}

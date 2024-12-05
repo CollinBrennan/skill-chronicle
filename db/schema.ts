@@ -15,11 +15,23 @@ export const log = pgTable('log', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
-  name: text('name').notNull(),
+  skillId: text('skill_id')
+    .notNull()
+    .references(() => skill.id),
   minutes: integer('minutes').notNull(),
   note: text('note').notNull(),
   date: timestamp('date').notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
+})
+
+export const skill = pgTable('skill', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text('name').notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id),
 })
 
 export const users = pgTable('user', {

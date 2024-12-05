@@ -40,7 +40,7 @@ export async function RecentLogsCard({ logs }: Props) {
             {logs.map((log) => (
               <TableRow key={log.id}>
                 <TableCell>{format(log.date, 'PP')}</TableCell>
-                <TableCell>{log.name}</TableCell>
+                <TableCell>{log.skillName}</TableCell>
                 <TableCell>{toFormattedDuration(log.minutes)}</TableCell>
               </TableRow>
             ))}

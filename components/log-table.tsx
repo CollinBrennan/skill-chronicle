@@ -1,16 +1,14 @@
-import { deleteLog, getLogs } from '@/actions/logActions'
+import { deleteLog, getLogs } from '@/actions/log-actions'
 import { auth } from '@/auth'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
 import { redirect } from 'next/navigation'
-import { Button } from './ui/button'
 import DeleteLogButton from './delete-log-button'
 import { format } from 'date-fns'
 
@@ -36,7 +34,7 @@ export default async function LogTable() {
         {logs.map((log) => (
           <TableRow key={log.id}>
             <TableCell>{format(log.date, 'PP')}</TableCell>
-            <TableCell>{log.name}</TableCell>
+            <TableCell>{log.skillName}</TableCell>
             <TableCell>{toFormattedDuration(log.minutes)}</TableCell>
             <TableCell>
               {log.note.length > 0 ? (
