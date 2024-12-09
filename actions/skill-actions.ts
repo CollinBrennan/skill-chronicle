@@ -22,3 +22,7 @@ export async function insertSkill(name: string, userId: string) {
 export async function updateSkillName(newName: string, skillId: string) {
   await db.update(skill).set({ name: newName }).where(eq(skill.id, skillId))
 }
+
+export async function deleteSkill(skillId: string) {
+  await db.delete(skill).where(eq(skill.id, skillId))
+}

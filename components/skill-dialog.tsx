@@ -1,4 +1,4 @@
-import { getSkills, insertSkill } from '@/actions/skill-actions'
+import { deleteSkill, getSkills, insertSkill } from '@/actions/skill-actions'
 import { auth } from '@/auth'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,9 +25,17 @@ export async function SkillDialog() {
   async function onCreateSkill(formData: FormData) {
     'use server'
     const skillName = formData.get('skillName')?.toString()
-    console.log(skillName)
     if (userId && skillName) {
       insertSkill(skillName, userId)
+      revalidatePath('/dashboard')
+    }
+  }
+
+  async function onDeleteSkill(formData: FormData) {
+    'use server'
+    const skillId = formData.get('skillId')?.toString()
+    if (skillId) {
+      deleteSkill(skillId)
       revalidatePath('/dashboard')
     }
   }
@@ -55,10 +63,15 @@ export async function SkillDialog() {
         <Label className="pt-4">Your skills</Label>
         <div className="flex flex-col">
           {skills.map((skill) => (
-            <div className="flex justify-between">
-              {skill.name}
-              <Button variant="link">Edit</Button>
-            </div>
+            <form
+              key={skill.id}
+              action={onDeleteSkill}
+              className="flex justify-between"
+            >
+              <span>{skill.name}</span>
+              <input type="hidden" name="skillId" value={skill.id} readOnly />
+              <Button variant="link">Delete</Button>
+            </form>
           ))}
         </div>
         <DialogFooter>

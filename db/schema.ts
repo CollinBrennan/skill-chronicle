@@ -17,7 +17,7 @@ export const log = pgTable('log', {
     .references(() => users.id),
   skillId: text('skill_id')
     .notNull()
-    .references(() => skill.id),
+    .references(() => skill.id, { onDelete: 'cascade' }),
   minutes: integer('minutes').notNull(),
   note: text('note').notNull(),
   date: timestamp('date').notNull(),
