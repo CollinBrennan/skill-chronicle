@@ -1,6 +1,5 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
 import {
   Label,
   PolarGrid,
@@ -19,27 +18,41 @@ import {
 } from '@/components/ui/card'
 import { ChartConfig, ChartContainer } from '@/components/ui/chart'
 import Link from 'next/link'
-const chartData = [{ minutes: 30 }]
+import { format } from 'date-fns'
 
-const chartConfig = {
-  minutes: {
-    label: 'Minutes',
-  },
-} satisfies ChartConfig
+type Props = {
+  totalMinutes: number
+  weeklyGoal: number
+  startDate: Date
+}
 
-export default function GoalChartCard() {
+export default function GoalChartCard({
+  totalMinutes,
+  weeklyGoal,
+  startDate,
+}: Props) {
+  const chartData = [{ minutes: totalMinutes }]
+
+  const chartConfig = {
+    minutes: {
+      label: 'Minutes',
+    },
+  } satisfies ChartConfig
+
   return (
-    <Card className="flex flex-col items-center">
+    <Card className="flex flex-col items-center text-center">
       <CardHeader>
         <CardTitle>Weekly Goal</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>
+          Since {format(startDate, 'EEEE, MMM d')}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex h-full">
         <ChartContainer config={chartConfig} className="w-48 min-h-48">
           <RadialBarChart
             data={chartData}
             startAngle={90}
-            endAngle={270}
+            endAngle={90 + 360 * Math.min(totalMinutes / weeklyGoal, 1)}
             innerRadius={80}
             outerRadius={110}
           >

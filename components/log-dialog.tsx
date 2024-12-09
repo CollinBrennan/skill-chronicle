@@ -44,7 +44,10 @@ const formSchema = z.object({
   hours: z.coerce.number().int().nonnegative().default(0),
   minutes: z.coerce.number().int().nonnegative().default(0),
   note: z.string().max(255).trim().default(''),
-  date: z.date(),
+  date: z.date().transform((date) => {
+    date.setHours(0, 0, 0, 0)
+    return date
+  }),
 })
 
 type Props = {

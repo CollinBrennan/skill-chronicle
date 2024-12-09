@@ -42,6 +42,7 @@ export const users = pgTable('user', {
   email: text('email').unique(),
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
+  weeklyGoal: integer('weekly_goal').notNull().default(30),
 })
 
 export const accounts = pgTable(

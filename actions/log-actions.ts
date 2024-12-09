@@ -3,7 +3,7 @@
 import { db } from '@/db/drizzle'
 import { log, skill } from '@/db/schema'
 import { LogData, LogFormData } from '@/types/types'
-import { desc, eq } from 'drizzle-orm'
+import { and, desc, eq, gt, gte } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 export async function insertLog({
@@ -48,4 +48,18 @@ export async function getRecentLogs(userId: string): Promise<LogData[]> {
     .limit(4)
 
   return logs.map((log) => ({ ...log.log, skillName: log.skill.name }))
+}
+
+export async function getTotalMinutesSinceDate(
+  userId: string,
+  since: Date
+): Promise<number> {
+  const logs = await db
+    .select({
+      minutes: log.minutes,
+    })
+    .from(log)
+    .where(and(eq(log.userId, userId), gte(log.date, since)))
+  const totalMinutes = logs.reduce((acc, log) => acc + log.minutes, 0)
+  return totalMinutes
 }
