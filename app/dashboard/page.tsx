@@ -1,13 +1,11 @@
 import { getRecentLogs, getTotalMinutesSinceDate } from '@/actions/log-actions'
 import { getSkills } from '@/actions/skill-actions'
-import { getWeeklyGoal } from '@/actions/users-actions'
 import { auth } from '@/auth'
 import GoalChartCard from '@/components/goal-chart-card'
 import LogDialog from '@/components/log-dialog'
 import LogTimelineCard from '@/components/log-timeline-card'
 import { RecentLogsCard } from '@/components/recent-logs-card'
 import { SkillDialog } from '@/components/skill-dialog'
-import { startOfWeek } from 'date-fns'
 import { redirect } from 'next/navigation'
 
 export default async function Dashboard() {

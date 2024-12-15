@@ -54,7 +54,7 @@ enum TimeInterval {
 }
 
 export default function LogTimelineCard({ userId }: Props) {
-  const [isPending, startTransition] = useTransition()
+  const [_, startTransition] = useTransition()
   const [chartData, setChartData] = useState<ChartData[]>([])
   const [description, setDescription] = useState('')
 
@@ -152,7 +152,7 @@ function minutesPerInterval(
   intervalFormatter: (interval: number) => string
 ): ChartData[] {
   const minutesPerInterval: number[] = new Array(numOfIntervals).fill(0)
-  for (let log of logs) {
+  for (const log of logs) {
     minutesPerInterval[getInterval(log.date)] += log.minutes
   }
 
