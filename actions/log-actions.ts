@@ -2,8 +2,8 @@
 
 import { db } from '@/db/drizzle'
 import { log, skill } from '@/db/schema'
-import { LogData, LogFormData } from '@/types/types'
-import { and, desc, eq, gt, gte } from 'drizzle-orm'
+import { LogData, LogFormData, LogTimelineData } from '@/types/types'
+import { and, asc, desc, eq, gt, gte } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
 export async function insertLog({
@@ -33,7 +33,7 @@ export async function getLogs(userId: string): Promise<LogData[]> {
     .from(log)
     .innerJoin(skill, eq(log.skillId, skill.id))
     .where(eq(log.userId, userId))
-    .orderBy(desc(log.createdAt))
+    .orderBy(desc(log.date))
 
   return logs.map((log) => ({ ...log.log, skillName: log.skill.name }))
 }
@@ -44,7 +44,7 @@ export async function getRecentLogs(userId: string): Promise<LogData[]> {
     .from(log)
     .innerJoin(skill, eq(log.skillId, skill.id))
     .where(eq(log.userId, userId))
-    .orderBy(desc(log.createdAt))
+    .orderBy(desc(log.date))
     .limit(4)
 
   return logs.map((log) => ({ ...log.log, skillName: log.skill.name }))
@@ -62,4 +62,17 @@ export async function getTotalMinutesSinceDate(
     .where(and(eq(log.userId, userId), gte(log.date, since)))
   const totalMinutes = logs.reduce((acc, log) => acc + log.minutes, 0)
   return totalMinutes
+}
+
+export async function getLogTimelineDataSinceDate(
+  userId: string,
+  since: Date
+): Promise<LogTimelineData[]> {
+  const logs = await db
+    .select({ date: log.date, minutes: log.minutes })
+    .from(log)
+    .where(and(eq(log.userId, userId), gte(log.date, since)))
+    .orderBy(asc(log.date))
+
+  return logs
 }

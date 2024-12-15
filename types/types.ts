@@ -23,3 +23,8 @@ export type Skill = {
   name: string
   userId: string
 }
+
+export type LogTimelineData = {
+  date: Date
+  minutes: number
+}

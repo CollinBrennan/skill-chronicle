@@ -43,9 +43,7 @@ export default function GoalChartCard({
     <Card className="flex flex-col items-center text-center">
       <CardHeader>
         <CardTitle>Weekly Goal</CardTitle>
-        <CardDescription>
-          Since {format(startDate, 'EEEE, MMM d')}
-        </CardDescription>
+        <CardDescription>{format(startDate, 'MMM d')} ~ Today</CardDescription>
       </CardHeader>
       <CardContent className="flex h-full">
         <ChartContainer config={chartConfig} className="w-48 min-h-48">

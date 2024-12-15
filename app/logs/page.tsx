@@ -12,7 +12,6 @@ export default async function Logs() {
     <div className="px-2">
       <h1 className="text-4xl">Logs</h1>
       <div className="py-4">
-        <LogDialog userId={session.user.id} />
         <LogTable />
       </div>
     </div>

@@ -21,17 +21,15 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        {session ? (
-          <SidebarProvider>
-            <AppSidebar session={session} />
-            <main className="w-full">
-              <SidebarTrigger />
-              {children}
-            </main>
-          </SidebarProvider>
-        ) : (
-          <SigninButton />
-        )}
+        <SidebarProvider>
+          {session && <AppSidebar session={session} />}
+          <main className="w-full">
+            {session && <SidebarTrigger />}
+            <div className="flex justify-center w-full">
+              <div className="max-w-screen-xl w-full">{children}</div>
+            </div>
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   )
