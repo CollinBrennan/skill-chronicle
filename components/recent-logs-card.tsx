@@ -16,6 +16,7 @@ import {
   TableRow,
 } from './ui/table'
 import { format } from 'date-fns'
+import { buttonVariants } from './ui/button'
 
 type Props = {
   logs: LogData[]
@@ -48,7 +49,7 @@ export async function RecentLogsCard({ logs }: Props) {
         </Table>
       </CardContent>
       <CardFooter>
-        <Link href="/logs" className="underline">
+        <Link href="/logs" className={buttonVariants({ variant: 'link' })}>
           View all
         </Link>
       </CardFooter>

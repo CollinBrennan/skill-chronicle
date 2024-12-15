@@ -74,10 +74,7 @@ export function AppSidebar({ session }: Props) {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <SignoutButton />
                 </DropdownMenuItem>
               </DropdownMenuContent>

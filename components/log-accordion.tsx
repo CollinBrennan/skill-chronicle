@@ -8,7 +8,6 @@ import {
 import { LogData } from '@/types/types'
 import { format } from 'date-fns'
 import { Button } from './ui/button'
-import { Trash2 } from 'lucide-react'
 
 type Props = {
   logs: LogData[]
@@ -29,7 +28,7 @@ export default async function LogAccordion({ logs }: Props) {
             <div className="flex w-full">
               <div className="w-1/4">{format(log.date, 'MMM d, yyyy')}</div>
               <div className="w-2/4">{log.skillName}</div>
-              <div className="w-1/4">{log.minutes}</div>
+              <div className="w-1/4">{toFormattedDuration(log.minutes)}</div>
             </div>
           </AccordionTrigger>
           <AccordionContent>
@@ -41,9 +40,6 @@ export default async function LogAccordion({ logs }: Props) {
               <span className="italic">No note</span>
             )}
             <form className="pt-4 flex gap-2 justify-end">
-              <Button variant="outline" type="submit">
-                Edit log
-              </Button>
               <Button
                 formAction={async () => {
                   'use server'
@@ -60,4 +56,9 @@ export default async function LogAccordion({ logs }: Props) {
       ))}
     </Accordion>
   )
+}
+
+function toFormattedDuration(minutes: number): string {
+  const hours = Math.round((minutes / 60) * 10) / 10
+  return minutes >= 60 ? hours + 'h' : minutes + 'm'
 }
