@@ -17,7 +17,7 @@ export default async function Home() {
             <span className="text-5xl font-bold">Skill Chronicle</span>
           </h1>
           <p className="pt-8 text-neutral-400">
-            Track the progress of skills you've been learning!
+            Track the progress of skills you have been learning!
           </p>
         </div>
         <div>

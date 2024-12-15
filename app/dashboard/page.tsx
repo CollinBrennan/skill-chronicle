@@ -1,4 +1,4 @@
-import { getRecentLogs, getTotalMinutesSinceDate } from '@/actions/log-actions'
+import { getRecentLogs } from '@/actions/log-actions'
 import { getSkills } from '@/actions/skill-actions'
 import { auth } from '@/auth'
 import GoalChartCard from '@/components/goal-chart-card'
