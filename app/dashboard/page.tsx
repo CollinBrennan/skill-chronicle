@@ -1,8 +1,4 @@
-import {
-  getLogs,
-  getRecentLogs,
-  getTotalMinutesSinceDate,
-} from '@/actions/log-actions'
+import { getRecentLogs, getTotalMinutesSinceDate } from '@/actions/log-actions'
 import { getSkills } from '@/actions/skill-actions'
 import { getWeeklyGoal } from '@/actions/users-actions'
 import { auth } from '@/auth'
@@ -22,14 +18,13 @@ export default async function Dashboard() {
 
   const startDate = startOfWeek(new Date())
 
-  const logs = await getLogs(userId)
   const recentLogs = await getRecentLogs(userId)
   const skills = await getSkills(userId)
   const weeklyGoal = await getWeeklyGoal(userId)
   const totalMinutes = await getTotalMinutesSinceDate(userId, startDate)
 
   return (
-    <div className="px-4">
+    <div className="px-4 w-full max-w-screen-xl">
       <h1 className="text-4xl">Dashboard</h1>
       <div className="py-16">
         <div className="flex flex-col gap-4">
