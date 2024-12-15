@@ -1,6 +1,6 @@
 'use client'
 
-import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 import {
   Card,
   CardContent,
@@ -17,10 +17,14 @@ import {
 import { LogTimelineData } from '@/types/types'
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
 import {
+  format,
   getDate,
   getDay,
   getDaysInMonth,
   getMonth,
+  setDate,
+  setDay,
+  setMonth,
   startOfMonth,
   startOfWeek,
   startOfYear,
@@ -40,7 +44,7 @@ type Props = {
 
 type ChartData = {
   interval: string
-  minutes: number
+  minutes: number | null
 }
 
 enum TimeInterval {
@@ -52,6 +56,7 @@ enum TimeInterval {
 export default function LogTimelineCard({ userId }: Props) {
   const [isPending, startTransition] = useTransition()
   const [chartData, setChartData] = useState<ChartData[]>([])
+  const [description, setDescription] = useState('')
 
   useEffect(() => {
     onIntervalChange(TimeInterval.WEEK)
@@ -62,28 +67,40 @@ export default function LogTimelineCard({ userId }: Props) {
     let startOfInterval = startOfWeek
     let numOfIntervals = 7
     let getInterval = getDay
+    let intervalFormatter = (interval: number) =>
+      format(setDay(today, interval), 'EEEEE')
+    let description = 'week'
 
-    switch (timeInterval) {
-      case TimeInterval.MONTH:
-        startOfInterval = startOfMonth
-        numOfIntervals = getDaysInMonth(today)
-        getInterval = getDate
-        break
-      case TimeInterval.YEAR:
-        startOfInterval = startOfYear
-        numOfIntervals = 12
-        getInterval = getMonth
-        break
+    if (timeInterval === TimeInterval.MONTH) {
+      startOfInterval = startOfMonth
+      numOfIntervals = getDaysInMonth(today)
+      getInterval = getDate
+      intervalFormatter = (interval: number) =>
+        format(setDate(today, interval + 1), 'd')
+      description = 'month'
+    } else if (timeInterval === TimeInterval.YEAR) {
+      startOfInterval = startOfYear
+      numOfIntervals = 12
+      getInterval = getMonth
+      intervalFormatter = (interval: number) =>
+        format(setMonth(today, interval), 'MMM')
+      description = 'year'
     }
+
     startTransition(async () => {
       const logs = await getLogTimelineDataSinceDate(
         userId,
         startOfInterval(today)
       )
-
       setChartData(() => {
-        return minutesPerInterval(logs, numOfIntervals, getInterval)
+        return minutesPerInterval(
+          logs,
+          numOfIntervals,
+          getInterval,
+          intervalFormatter
+        )
       })
+      setDescription(description)
     })
   }
 
@@ -91,37 +108,26 @@ export default function LogTimelineCard({ userId }: Props) {
     <Card>
       <CardHeader>
         <CardTitle>Your Timeline</CardTitle>
-        <CardDescription>Add description later.</CardDescription>
+        <CardDescription>
+          Showing total minutes logged this {description}.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="max-h-80 w-full">
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 26,
-              right: 26,
-            }}
-          >
+          <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="interval"
               tickLine={false}
+              tickMargin={10}
               axisLine={false}
-              tickMargin={8}
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="dot" hideLabel />}
+              content={<ChartTooltipContent hideLabel />}
             />
-            <Area
-              dataKey="minutes"
-              type="linear"
-              fill="var(--color-desktop)"
-              fillOpacity={1}
-              stroke="var(--color-desktop)"
-            />
-          </AreaChart>
+            <Bar dataKey="minutes" fill="#000000" radius={2} />
+          </BarChart>
         </ChartContainer>
         <Tabs
           defaultValue={TimeInterval.WEEK}
@@ -142,7 +148,8 @@ export default function LogTimelineCard({ userId }: Props) {
 function minutesPerInterval(
   logs: LogTimelineData[],
   numOfIntervals: number,
-  getInterval: (date: Date) => number
+  getInterval: (date: Date) => number,
+  intervalFormatter: (interval: number) => string
 ): ChartData[] {
   const minutesPerInterval: number[] = new Array(numOfIntervals).fill(0)
   for (let log of logs) {
@@ -150,7 +157,7 @@ function minutesPerInterval(
   }
 
   return minutesPerInterval.map((minutes, interval) => ({
-    interval: interval.toString(),
-    minutes,
+    interval: intervalFormatter(interval),
+    minutes: minutes === 0 ? null : minutes,
   }))
 }
