@@ -1,8 +1,6 @@
 import { getLogs } from '@/actions/log-actions'
 import { auth } from '@/auth'
 import LogAccordion from '@/components/log-accordion'
-import LogDialog from '@/components/log-dialog'
-import LogTable from '@/components/log-table'
 import { redirect } from 'next/navigation'
 
 export default async function Logs() {

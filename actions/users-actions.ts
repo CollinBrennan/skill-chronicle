@@ -13,3 +13,13 @@ export async function getWeeklyGoal(userId: string): Promise<number> {
     .where(eq(users.id, userId))
   return data[0].weeklyGoal
 }
+
+export async function updateWeeklyGoal(
+  userId: string,
+  newGoal: number
+): Promise<void> {
+  await db
+    .update(users)
+    .set({ weeklyGoal: newGoal })
+    .where(eq(users.id, userId))
+}

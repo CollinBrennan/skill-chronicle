@@ -16,12 +16,8 @@ export default async function Dashboard() {
 
   if (!userId) redirect('/')
 
-  const startDate = startOfWeek(new Date())
-
   const recentLogs = await getRecentLogs(userId)
   const skills = await getSkills(userId)
-  const weeklyGoal = await getWeeklyGoal(userId)
-  const totalMinutes = await getTotalMinutesSinceDate(userId, startDate)
 
   return (
     <div className="px-4 w-full max-w-screen-xl">
@@ -33,11 +29,7 @@ export default async function Dashboard() {
             <SkillDialog />
           </div>
           <div className="flex flex-col md:flex-row gap-4">
-            <GoalChartCard
-              weeklyGoal={weeklyGoal}
-              totalMinutes={totalMinutes}
-              startDate={startDate}
-            />
+            <GoalChartCard />
             <RecentLogsCard logs={recentLogs} />
           </div>
           <div>

@@ -1,13 +1,3 @@
-'use client'
-
-import {
-  Label,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
-} from 'recharts'
-
 import {
   Card,
   CardContent,
@@ -16,28 +6,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { ChartConfig, ChartContainer } from '@/components/ui/chart'
-import Link from 'next/link'
-import { format } from 'date-fns'
+import { format, startOfWeek } from 'date-fns'
+import GoalDialog from './goal-dialog'
+import { getWeeklyGoal } from '@/actions/users-actions'
+import { getTotalMinutesSinceDate } from '@/actions/log-actions'
+import { auth } from '@/auth'
+import { GoalChart } from './goal-chart'
 
-type Props = {
-  totalMinutes: number
-  weeklyGoal: number
-  startDate: Date
-}
+export default async function GoalChartCard() {
+  const session = await auth()
+  const userId = session?.user?.id
 
-export default function GoalChartCard({
-  totalMinutes,
-  weeklyGoal,
-  startDate,
-}: Props) {
-  const chartData = [{ minutes: totalMinutes }]
+  if (!userId) return null
 
-  const chartConfig = {
-    minutes: {
-      label: 'Minutes',
-    },
-  } satisfies ChartConfig
+  const startDate = startOfWeek(new Date())
+  const weeklyGoal = await getWeeklyGoal(userId)
+  const totalMinutes = await getTotalMinutesSinceDate(userId, startDate)
 
   return (
     <Card className="flex flex-col items-center text-center">
@@ -46,60 +30,10 @@ export default function GoalChartCard({
         <CardDescription>{format(startDate, 'MMM d')} ~ Today</CardDescription>
       </CardHeader>
       <CardContent className="flex h-full">
-        <ChartContainer config={chartConfig} className="w-48 min-h-48">
-          <RadialBarChart
-            data={chartData}
-            startAngle={90}
-            endAngle={90 + 360 * Math.min(totalMinutes / weeklyGoal, 1)}
-            innerRadius={80}
-            outerRadius={110}
-          >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="none"
-              className="first:fill-muted last:fill-background"
-              polarRadius={[86, 74]}
-            />
-            <RadialBar dataKey="minutes" background cornerRadius={10} />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-4xl font-bold"
-                        >
-                          {chartData[0].minutes.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Minutes
-                        </tspan>
-                      </text>
-                    )
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
-        </ChartContainer>
+        <GoalChart weeklyGoal={weeklyGoal} totalMinutes={totalMinutes} />
       </CardContent>
       <CardFooter>
-        <Link href="/logs" className="underline">
-          Edit goal
-        </Link>
+        <GoalDialog />
       </CardFooter>
     </Card>
   )
