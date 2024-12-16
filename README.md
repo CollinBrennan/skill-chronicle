@@ -1,5 +1,3 @@
-# Skill Chronicle
-
 ## Assessment
 
 When I first created the application, I had the opportunity to collaborate with a friend of mine who is a UI/UX designer, so we began by discussing the features the application should have and then designing wireframes for the user interface. The application was originally a small demo of an idea my friend had and wanted to present to those who might be interested. We communicated regularly about design decisions and the specific look and functionality of the user interface, but all implementation was ultimately up to me. 
@@ -16,14 +14,12 @@ I also wanted to demonstrate my knowledge of databases, so the application moved
 ## Code Review
 
 ## Original Artifact
-Deployment: https://skill-chronicle.web.app/
-
-GitHub: https://github.com/CollinBrennan/skill-chronicle
+[Application](https://skill-chronicle.web.app)
+[GitHub](https://github.com/CollinBrennan/skill-chronicle)
 
 ## Enhanced Artifact
-Deployment: https://skill-chronicle-23pr.vercel.app/
-
-GitHub: https://github.com/CollinBrennan/skillchronicle
+[Application](https://skill-chronicle-23pr.vercel.app)
+[GitHub](https://github.com/CollinBrennan/skillchronicle)
 
 ## Narratives 
 
