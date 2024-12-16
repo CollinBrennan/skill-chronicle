@@ -12,13 +12,16 @@ Since the client interacts so heavily with a database, I knew from the start tha
 I also wanted to demonstrate my knowledge of databases, so the application moved from Firestore, a NoSQL database, to PostgreSQL which offers a more rigid schema and well-defined rules. Working with a SQL database also gave me a chance to use a popular and lightweight ORM called Drizzle which made the process of constructing database calls very efficient. It was also important to show my knowledge of data structures and algorithms, and this is mostly found in the methods used to preprocess the data returned by the database before it gets shown to the user.
 
 ## Code Review
+[https://www.youtube.com/watch?v=2-QOXNseFdg](https://www.youtube.com/watch?v=2-QOXNseFdg)
 
 ## Original Artifact
 [Application](https://skill-chronicle.web.app)
+
 [GitHub](https://github.com/CollinBrennan/skill-chronicle)
 
 ## Enhanced Artifact
 [Application](https://skill-chronicle-23pr.vercel.app)
+
 [GitHub](https://github.com/CollinBrennan/skillchronicle)
 
 ## Narratives 
